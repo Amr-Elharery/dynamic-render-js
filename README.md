@@ -1,1 +1,1 @@
-Simple dynamic rendering with JavaScript
+# Simple dynamic rendering with JavaScript
