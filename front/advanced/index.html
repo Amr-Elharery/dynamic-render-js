@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <title>Advanced Example</title>
+  </head>
+  <body>
+    <h1>My Friends:</h1>
+    <!-- status and message -->
+    <div class="response">
+      <p>Status code: <span class="status"></span></p>
+      <p>Message: <span class="message"></span></p>
+    </div>
+
+    <hr/>
+    <!-- div to hold friends -->
+    <div class="friends">
+    </div>
+  </body>
+  
+  <script>
+    // Get an array of friends from the server (API request)
+    let friends = [];
+    let request = new XMLHttpRequest();
+
+    // Make a synchronous request to the server
+    request.open('GET', 'http://localhost:8000/advanced.php', false);
+    request.onreadystatechange = function() {
+      if (request.readyState === 4 && request.status === 200) {
+        // Parse the JSON response
+        // The response is a JSON string contains response object
+        let response = JSON.parse(request.responseText);
+        // Look at console
+        console.log(response);
+        /*
+          The response in console is:
+              {
+                status: 200,
+                message: 'Data retrieved successfully',
+                data: [
+                  {name: 'Amr', age: 20},
+                  {name: 'Ahmed', age: 21},
+                  {name: 'Mohamed', age: 22},
+                  {name: 'Ahmed', age: 23}
+                ]
+              }
+        */
+        // We need to catch the data array from the response object
+        friends = response.data;
+        
+        // Display the message in view
+        document.querySelector('.status').textContent = response.status;
+        document.querySelector('.message').textContent = response.message;
+      }
+    };
+    request.send();
+
+    // Get the div element that will contain the friends
+    let friendsDiv = document.querySelector('.friends');
+    // Loop over the friends array and create a p element for each friend
+    for (let i = 0; i < friends.length; i++) {
+      let friend = friends[i];
+      // Create a p element
+      let p = document.createElement('p');
+      // Set the text content of the p element
+      p.textContent = 'Name: ' + friend.name + ' - Age: ' + friend.age;
+      // Append the p element to the friends div
+      friendsDiv.appendChild(p);
+    }
+</script>
+</html>
